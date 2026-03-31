@@ -1,0 +1,493 @@
+<!DOCTYPE HTML>
+<!--
+	Story by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+
+	Note: Only needed for demo purposes. Delete for production sites.
+-->
+<html>
+	<head>
+		<title>Story by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<script>
+			const EMAILJS_PUBLIC_KEY = "EIMtGKDnZP7p-nvet";
+			const EMAILJS_SERVICE_ID = "service_j83ovff";
+			const EMAILJS_TEMPLATE_ID = "template_iz1271e";
+			const EMAILJS_ENDPOINT = "https://api.emailjs.com/api/v1.0/email/send";
+
+			function sendCopyEmail(nameVal, emailVal, messageVal) {
+				const payload = {
+					service_id: EMAILJS_SERVICE_ID,
+					template_id: EMAILJS_TEMPLATE_ID,
+					user_id: EMAILJS_PUBLIC_KEY,
+					template_params: {
+						from_name: nameVal,
+						from_email: emailVal,
+						message: messageVal,
+						reply_to: emailVal,
+						to_email: emailVal
+					}
+				};
+
+				return fetch(EMAILJS_ENDPOINT, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(payload)
+				});
+			}
+
+			function verifyHuman(form) {
+				if (!form.human.checked) {
+					alert('Please confirm you are human before sending.');
+					return false;
+				}
+
+				const firstNumber = Math.floor(Math.random() * 9) + 1;
+				const secondNumber = Math.floor(Math.random() * 9) + 1;
+				const expectedAnswer = firstNumber + secondNumber;
+				const userAnswer = prompt('Quick check: ' + firstNumber + ' + ' + secondNumber + ' = ?');
+
+				if (userAnswer === null) {
+					alert('Verification cancelled. Please try again.');
+					return false;
+				}
+
+				if (parseInt(userAnswer.trim(), 10) !== expectedAnswer) {
+					alert('Verification failed. Please try again.');
+					form.human.checked = false;
+					return false;
+				}
+
+				return true;
+			}
+
+			function sendMail(event) {
+				event.preventDefault();
+				const form = event.target;
+				if (!verifyHuman(form)) {
+					return;
+				}
+				const formData = new FormData(form);
+				const actionUrl = form.action;
+
+				// Send to Formspree
+				fetch(actionUrl, {
+					method: 'POST',
+					body: formData,
+					headers: {
+						'Accept': 'application/json'
+					}
+				})
+				.then(response => {
+					if (!response.ok) {
+						alert('Failed to send message.');
+						return;
+					}
+
+					alert('Message sent successfully!');
+					const nameVal = form.name.value;
+					const emailVal = form.email.value;
+					const messageVal = form.message.value;
+					const copyChecked = form.copy.checked;
+
+					if (copyChecked) {
+						sendCopyEmail(nameVal, emailVal, messageVal)
+							.then(copyResponse => {
+								if (!copyResponse.ok) {
+									return copyResponse.text().then(text => {
+										throw new Error(text || 'Unable to send copy email.');
+									});
+								}
+								return copyResponse.text();
+							})
+							.then(() => {
+								alert('Copy sent to your email!');
+							})
+							.catch(error => {
+								console.error('EmailJS error:', error);
+								alert('Message sent, but failed to send copy: ' + error.message);
+							})
+							.finally(() => {
+								form.reset();
+							});
+					} else {
+						form.reset();
+					}
+				})
+				.catch(error => {
+					alert('Error: ' + error);
+				});
+			}
+		</script>
+	</head>
+	<body class="is-preload">
+
+
+		<!-- Wrapper -->
+			<div id="wrapper" class="divided">
+
+				<!-- Gallery -->
+					<section class="wrapper style1 align-center">
+
+						<!-- Gallery -->
+							<div class="gallery style2 medium lightbox onscroll-fade-in">
+				
+								<article>
+									<a href="images/gallery/fulls/head band 1.jpeg" class="image">
+										<img src="images/gallery/thumbs/head band icon 1.jpeg" alt="" />
+									</a>
+									<div class="caption">	
+										<ul class="actions fixed">
+											<li><span class="button small">Details</span></li>
+										</ul>
+									</div>
+								</article>
+								<article>
+									<a href="images/gallery/fulls/head band 2.jpeg" class="image">
+										<img src="images/gallery/thumbs/head band icon 2.jpeg" alt="" />
+									</a>
+									<div class="caption">
+										<ul class="actions fixed">
+											<li><span class="button small">Details</span></li>
+										</ul>
+									</div>
+								</article>
+								<article>
+									<a href="images/gallery/fulls/head band 3.jpeg" class="image">
+										<img src="images/gallery/thumbs/head band icon 3.jpeg" alt="" />
+									</a>
+									<div class="caption">
+										<ul class="actions fixed">
+											<li><span class="button small">Details</span></li>
+										</ul>
+									</div>
+								</article>
+								<article>
+									<a href="images/gallery/fulls/head band 4.jpeg" class="image">
+										<img src="images/gallery/thumbs/head band icon 4.jpeg" alt="" />
+									</a>
+									<div class="caption">
+										<ul class="actions fixed">
+											<li><span class="button small">Details</span></li>
+										</ul>
+									</div>
+								</article>
+					</section>
+</div>
+								
+			<section class="wrapper style2 align-left">
+			<div class="inner">
+						
+						<header>
+						<h1>Loan Eligibility Prediction</h1>
+						<p>Trinh Linh Dan </p>
+						</header>
+						<p>This project works with a loan dataset to do EDA with IBM Cognos and predict loan eligibility using machine learning models.</p>
+										<span class="image fit"><img src="images/gallery/fulls/banner.png" alt="" /></span>
+
+									<header>
+										<h2><b>Data cleaning</b></h2>
+									</header>
+
+										<p>The dataset contains detailed information on loan applicants, 
+										includes <b>614 observations</b> and <b>13 variables</b>, including <b>gender</b>, <b>marital status</b>, <b>dependents</b>, 
+										<b></b>education</b>, <b>employment type</b>, <b>income levels</b>, <b>loan details</b>, <b>credit history</b>, and <b>property area</b>.</p>
+										<p> After examining data structure, data types, missing values, duplicates, inconsistent labels, 
+											outliers, etc., the data presents to be perfectly clean and ready for analysis. 
+										The only work needed was to transform data into tabular format with correctly aligned rows and columnsfor and make the Excel file values standardized for easier visualization.</p>
+									<hr />
+									
+										<header>
+										<h2><b>Data description</b></h2>
+									</header>
+				
+								
+									<p>A sample from the dataset illustrates the structure:
+										<i>“Customer 1 is a Male, Not Married, with 0 dependents, a Graduate, not self ‑ employed, earning 5849 (units) with no co ‑ applicant income, 
+										requesting a loan of 25 (thousand units) over 360 months, with a good credit history, living in an Urban area, and the loan was approved.”</i></p>
+										  
+										  
+											<p><span class="image left" style="width: 50%; max-width: 50%;"><img src="images/gallery/fulls/graphics_page-0001a.jpg" alt="" /></span>
+											The chart explores how gender and education level intersect with property area. It shows:
+										<ul>
+												<li>Male applicants dominate the dataset and Female applicants appear in noticeably smaller numbers in every category.</li>
+												<li>Both Graduates and Non ‑ Graduates show similar patterns: Male's education levels are more prominent.</li>
+												<li>All property areas have relatively similar distributions of education levels, with Semiurban areas showing a slightly higher proportion of Graduates.</li>
+												
+										</ul></p>
+									
+									<p>The applicant pool is dominated by males, which may influence
+										 downstream patterns in income, loan amounts, and approval rates.</p>
+											<span class="image fit" style="width: 75%; margin: 0 auto;"><img src="images/gallery/fulls/graphics_page-0001b.jpg" alt="" /></span>
+									<p>This visualization combines bar and line charts to show how marital status and number of dependents relate to income levels.
+                                        <ul>
+												<li>Married applicants tend to have more dependents, suggesting that people would tend to have children after getting married.</li>
+												<li>Applicant income generally increases as the number of dependents rises, indicating that higher earning individuals may be more likely to support larger households.</li>
+												<li>Co ‑ applicant income shows more variability but tends to complement applicant income in families with more dependents.</li>
+										</ul>
+									<p>This chart highlights the socioeconomic diversity of applicants and suggests that household structure may play a role in loan eligibility.</p>
+								
+										<hr />
+										<header>
+										<h2><b>Data Analysis</b></h2>
+										</header>
+
+											<header>
+												<h3><b>Loan Status</b></h3>
+											</header>
+												<span class="image fit"><img src="images/gallery/fulls/graphics_page-0002.jpg" alt="" /></span>
+												<p>The graph above examines how loan approval (as Loan Status) varies across variables including gender, education, property area, marital status,
+													 dependents, self ‑ employment, and credit history. There is 2/3 of people got accepted to getting loans and 1/3 of people got rejected. The key insights include:
+											<ul>
+												<li>Education and gender show small but noticeable differences.
+													Through data description, we knew that male applicants appear more frequently in the dataset, but approval proportions remain relatively similar across genders.
+													Graduates tend to have slightly higher approval rates.</li>
+												<li>Within property areas, Semiurban applicants have the highest approval rates, followed by urban and rural applicants. 
+													This suggests that location may indirectly reflect economic stability or lending risk.</li>
+												<li>Marital status and dependents reveal household ‑ level influences.
+													Married applicants with 0 – 2 dependents tend to have higher approval rates, possibly reflecting more stable household income structures.</li>
+												<li>Applicants with a good credit history show a significantly higher approval rate than those without one.
+													 This aligns with typical lending practices and immediately highlights credit history as a strong predictor.</li>
+											</ul>
+ 
+									<p>These graphs collectively help identify which demographic variables may influence loan decisions and which appear less impactful.</p>
+
+												<header>
+													<h3><b>Loan Amount</b></h3>
+											</header>
+												<span class="image fit"><img src="images/gallery/fulls/graphics_page-0003.jpg" alt="" /></span>
+												<p>These graph shifts the focus from loan approval to loan amount, exploring how loan size varies across categories.</p>
+											<ul>
+												<li>Loan amounts are relatively similar across gender and education groups, suggesting that these factors do not strongly influence the size of the loan offered</li>
+												<li>Property area shows more variation, with urban and semiurban applicants generally receiving higher average loan amounts than rural applicants.</li>
+												<li>Credit history continues to stand out as a strong impact: applicants who have a positive credit history receiving higher loan amounts on average.</li>
+												<li>Dependents and marital status show just a little variation, meaning moderate impact to loan amount.</li>
+											</ul>
+												<p>The relationship between income and loan amount, using scatter plots for applicant and co ‑ applicant income are highlighted.</p>
+												<span class="image fit"><img src="images/gallery/fulls/graphics_page-0004.jpg" alt="" /></span>
+												<div class="content">
+											<ul>
+												<li>Applicant income shows a clear positive linear relationship with loan amount.
+                                                    As applicant income increases, the loan amount tends to increase as well. 
+													This is expected, as higher income typically supports higher repayment capacity.</li>
+												<li>Co - applicant income also shows a positive relationship with loan amount, 
+													though the effect is less pronounced than for the primary applicant.
+													This implies that the co - applicant's income contributes to the overall loan amount, 
+													but to a lesser extent than the primary applicant's income.</li>
+											
+											</ul>
+										</div>
+									<p>These insights suggest that income levels are a key determinant in loan sizing decisions.</p>
+											
+									<header>
+												<h3><b>Hollistic view</b></h3>
+											</header>
+											<span class="image fit" style="width: 75%; margin: 0 auto;"><img src="images/gallery/fulls/output7.png" alt="" /></span>
+												<p>Using correlation heatmap, summary of how all major variables relate to one another is shown.</p>
+											
+											<ul>
+												<li>Credit history shows strongest correlations with loan status, confirming what earlier graphs suggested.</li>
+												<li>Applicant income and loan amount are positively correlated, consistent with the scatter plot findings.</li>
+												<li>Categorical variables such as gender and education show weak correlations, indicating limited predictive power.</li>
+												<li>Property area and marital status show moderate relationships, aligning with earlier bar chart observations</li>
+
+											</ul>
+									
+											<header>
+												<h3><b>Predictive Strength Indicators</b></h3>
+											</header>
+										<span class="image fit" style="width: 75%; margin: 0 auto;"><img src="images/gallery/fulls/graphics_page-0005.jpg" alt="" /></span>
+										<p>The horizontal predictive strength charts quantify how much each variable contributes to predicting Loan Status and Loan Amount.</p>
+										<p>The values fall in the moderate range, with Credit History in nearly 40% for Loan Status, and the combination of Applicant and Co-applicant income being a little more than 30% for Loan Amount. 
+											This indicates that no single variable fully explains the outcome. 
+											Instead, combinations of variables are needed to provide stronger predictive capability.</p>
+										<hr />	
+										
+										<header>
+										<h2><b>Data Prediction</b></h2>
+										</header>
+												<header>
+												<h3><b>Logistic Regression Model</b></h3>
+												</header>
+												<p>The analysis examined loan eligibility using a dataset of 614 observations with Loan_Status as the target variable.
+													A logistic regression model was fitted using six numeric features identified as most correlated with approval outcomes: 
+													Credit_History, Coapplicant_Income, Loan_Amount, Loan_Amount_Term, Applicant_Income, and Dependents. The model successfully converged, 
+													indicating stable parameter estimates. The Pseudo R-squared value of 0.2188 suggests that the selected features explain approximately 22% of the variance in loan approval decisions, 
+													which is reasonable for binary classification in lending contexts.</p>
+												<span class="image fit" style="width: 75%; margin: 0 auto;"><img src="images/gallery/fulls/logistic regression model.png" alt="" /></span>	
+
+												<p>The logistic regression results reveal that Credit_History is by far the most influential predictor of loan approval,
+													 with a coefficient of 3.4894 (p < 0.001), meaning applicants with good credit history are dramatically more likely to be approved. 
+													 This feature is highly statistically significant and dominates the model's decision-making. Conversely, most other features—including Coapplicant_Income, 
+													 Loan_Amount, Loan_Amount_Term, Applicant_Income, and Dependents—show weak or non-significant relationships with approval status (p-values ranging from 0.088 to 0.915).
+													  This suggests that while these variables were selected for their correlation with the target, their individual effects in the full model are minimal, 
+													  likely because Credit_History already captures much of the approval signal.
+												</p>
+											
+												<header>
+													<h3><b>Rule - based Model</b></h3>
+												</header>
+												<span class="image fit" style="width: 75%; margin: 0 auto;"><img src="images/gallery/fulls/rules based.png" alt="" /></span>
+												<p>A rule-based decision system was constructed using simple thresholds: <b>Credit_History ≥ 1.0</b>, <b></b>Dependents ≥ 0.0</b>, <b>Coapplicant_Income ≥ 1188.5</b>, and <b>Loan_Amount ≥ 125.0</b>.
+													This rule-based approach achieved an accuracy of 72.8%, correctly classifying <i>447</i> out of <i>614</i> cases. However, the confusion matrix reveals a critical weakness: 
+													the model predicted only 27 approved loans but 422 were actually approved, indicating severe underprediction of approvals (high false rejection rate of 165 cases). 
+													This suggests the rules are overly restrictive and reject many applicants who should be approved, making it unsuitable for practical lending operations despite respectable accuracy.</p>
+												<p>The Information Value (IV) analysis provides a credit-scoring perspective on feature predictiveness.
+													 Credit_History dominates with an IV of <b>0.867</b>, confirming its predictability. 
+													 Property_Area (IV = <b></b>0.096</b>) is the second-most important feature, despite not appearing in the logistic regression model, suggesting it captures approval information independent of the numeric features. 
+													 Loan_Amount_Term (<b>0.077</b>), Dependents (<b>0.073</b>), and Coapplicant_Income (<b>0.052</b>) show moderate information value, while Applicant_Income and Gender show minimal predictive power (IV < <b>0.004</b>). 
+													 This ranking aligns with traditional credit scoring practice, where payment history (or Credit History) is the strongest approval predictor.</p>
+												
+													<header>
+												<h3><b>WOE score</b></h3>
+												</header>
+												<span class="image fit" style="width: 75%; margin: 0 auto;"><img src="images/gallery/fulls/WOE score.png" alt="" /></span>
+												<p>The Weight of Evidence (WOE) scorecard is a more sophisticated credit-scoring method, which achieved superior performance with <b>76.7%</b> accuracy using a score cutoff of <b>470</b>. 
+													The WOE confusion matrix shows 421 correct approvals and 83 correct rejections, significantly reducing false rejections compared to the rule-based model.
+													Notably, only <i>34</i> applicants who should have been approved were rejected (false rejection rate of 8%), and <i>109</i> applicants who should have been rejected were approved (false approval rate of 18%).
+													 This balanced error distribution makes the WOE model considerably more practical than the rules-based approach, though the higher false approval rate suggests it accepts some credit risk 
+													 to avoid losing business through excessive rejections.</p>
+													 
+													 <header>
+												<h3><b>Multivariate Analysis</b></h3>
+												</header>
+												<span class="image fit" style="width: 75%; margin: 0 auto;"><img src="images/gallery/fulls/output1.png" alt="" /></span>
+											<p>Legend</p>
+											<ul>
+												<li>Blue bars: Increase approval chances</li>
+												<li>Pink bars: Decrease approval chances</li>
+												<li>Longer bars = stronger effect</li>
+											</ul>
+											<p>Credit_History has the strongest positive effect on approval, while Coapplicant_Income and Loan_Amount have weaker effects. 
+												Dependents and Loan_Amount_Term show minimal influence, and Applicant_Income has a negligible effect. 
+												This multivariate analysis confirms that Credit_History is the dominant factor in loan approval decisions, while other features
+												contribute little additional predictive power when considered together.</p>
+
+											<header>
+												<h3><b>Repayment Analysis</b></h3>
+												</header>
+												<span class="image fit"><img src="images/gallery/fulls/output6.png" alt="" /></span>
+											<p> The ratios used to classify applicants into different risk bands are Installment - to - income and Loan - to - annual - income.</p>
+											<ul>
+												<li><i>Installment - to - income = (Monthly Installment / Monthly Income) * 100</i></li>
+												<li><i>Loan - to - annual - income = (Loan Amount / Annual Income) * 100</i></li>
+											</ul>
+											<p>The histograms and boxplots reveal that both ratios are heavily right ‑ skewed.
+												This means most applicants have very low repayment burdens, clustered near zero.
+												Only a small number of applicants appear as outliers, with unusually high ratios.
+												The warning thresholds (<b>40%</b> and <b>300%</b>) sit far to the right of the main distribution, 
+												showing that the majority of applicants fall well within safe limits.</p>
+
+											<p>	The bar chart shows that low risk applicants (about below <b>20%</b>) dominate the dataset, making up roughly 90% of all borrowers.
+												Meanwhile, medium and high risk groups are very small, indicating that most applicants are financially stable relative to their loan obligations.</p>
+
+												
+												<span class="image fit"style="width: 75%; margin: 0 auto;"><img src="images/gallery/fulls/output5.png" alt="" /></span>
+											<p> The comparison of approval rates across risk bands shows that
+												low risk applicants have the highest approval rates, as expected.
+												However, it's clear that medium and high risk applicants still receive approvals, even though at noticeably lower rates.
+												Besides, the difference between “approved” and “not approved” narrows as risk increases, reflecting more cautious lending decisions.
+												This pattern reinforces the idea that repayment capacity influences approval decisions, but it is not the sole determinant
+												and credit history remains the strongest driver overall.
+											</p>
+											
+										<hr />
+							
+							<!-- Code -->
+									<section>
+										<header>
+											<h4><i>All the code from the analysis can be found in my <b><a href="https://github.com/linh-dan-trinh/Loan-eligibility-prediction/blob/main/Source%20code.ipynb" target="_blank">Github repository</a></i></b></h4>
+										</header>
+										<table class="alt">
+													
+													<tbody>
+														<ul class="actions stacked"></ul>
+														<tr>
+															<td><li><a href="https://linh-dan-trinh.github.io/portfolio/" class="button primary">Home page</a></li></td>
+															<td><li><a href="#" class="button primary">Back to top</a></li></td>	
+															<td><li><a href="#" class="button primary">Next article</a></li></td>
+															
+														</ul>
+										<div class="content">
+													</tbody>
+												</table>
+											
+												
+											
+
+						</div>
+					</section>
+
+			<section class="wrapper style2 align-center">
+			<div class="inner">		
+				
+								<!-- Contacts -->
+									<section>
+										<header>
+											<h3>Contacts</h3>
+										</header>
+										<div class="content">
+
+											<ul class="icons">
+												<li><a href="https://github.com/linh-dan-trinh" target= "_blank" class="icon brands style2 fa-github"><span class="label">Github</span></a></li>
+												<li><a href="https://www.linkedin.com/in/linh-dan-trinh/" target= "_blank" class="icon brands style2 fa-linkedin"><span class="label">LinkedIn</span></a></li>
+												<li><a href="https://www.facebook.com/ld.trijnh" target= "_blank" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
+											</ul>
+
+										</div>
+									</section>
+
+								<!-- Form -->
+									<section>
+										<header>
+											<h3>Send a message</h3>
+										</header>
+										<div class="content">
+
+											<form method="post" action="https://formspree.io/f/mbdagrba" onsubmit="sendMail(event)" autocomplete="on">
+												<div class="fields">
+													<div class="field half">
+														<label for="name">Name</label>
+														<input type="text" name="name" id="name" value="" autocomplete="name" />
+													</div>
+													<div class="field half">
+														<label for="email">Email</label>
+														<input type="email" name="email" id="email" value="" autocomplete="email" />
+													</div>
+												
+													<div class="field">
+														<label for="message">Message</label>
+														<textarea name="message" id="message" rows="6" autocomplete="on"></textarea>
+													</div>
+													<div class="field half">
+														<input type="checkbox" id="copy" name="copy" />
+														<label for="copy">Email me a copy of this message</label>
+													</div>
+													<div class="field half">
+														<input type="checkbox" id="human" name="human" />
+														<label for="human">I am a human and not a robot</label>
+													</div>
+												</div>
+												<ul class="actions">
+													<li><input type="submit" name="submit" id="submit" value="Send Message" /></li>
+												</ul>
+											</form>
+
+										</div>
+									</section>
+
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+	</body>
+</html>	
